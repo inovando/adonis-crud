@@ -2,19 +2,12 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PaginationResponse from './PaginationHelper'
 export interface CrudOperationsOptions {
   repository: any
-
-  transformer: any
-
   validators: {
     store?: any
-
     update?: any
   }
-
   storeProps: string[]
-
   updateProps: string[]
-
   event: any
 }
 
@@ -26,43 +19,37 @@ export function Crud(options: CrudOperationsOptions): ClassDecorator {
   const functionMap: FunctionMap = {
     async index(ctx) {
       const authUser = ctx.auth.user
-
       const { all, sort = 'created_at', order = 'desc' } = ctx.request.all()
-
       const qs = ctx.request.qs()
-
       const query = options.repository.index({ qs, authUser })
-
       query.orderBy(sort, order)
 
       if (all) {
         return query.exec()
       }
 
-      return PaginationResponse({
+      const data = await PaginationResponse({
         qs,
         query,
-        transformerClass: options.transformer,
-        ctx,
       })
+
+      return ctx.response.status(200).json(data)
     },
 
     async show(ctx) {
-      const { params, transform, request } = ctx
-
+      const { params, request } = ctx
       const queryString = request.qs()
-
       let authUser = ctx.auth.user
 
       const data = await options.repository.show({
         id: params.id,
-
         authUser,
-
         status: queryString.status,
       })
-
-      return await transform.withContext(ctx).item(data, options.transformer)
+      if (!data) {
+        return ctx.response.status(404).json({ msg: 'Not Found' })
+      }
+      return data
     },
 
     async store(ctx) {
@@ -85,7 +72,7 @@ export function Crud(options: CrudOperationsOptions): ClassDecorator {
     },
 
     async update(ctx) {
-      const { params, transform, request } = ctx
+      const { params, request } = ctx
 
       const body = request.only(options.updateProps)
 
@@ -123,8 +110,7 @@ export function Crud(options: CrudOperationsOptions): ClassDecorator {
         updatedObject: updatedObject.toJSON(),
       })
 
-      const updateOutput = await transform.withContext(ctx).item(updatedObject, options.transformer)
-      return ctx.response.status(200).json(updateOutput)
+      return ctx.response.status(200).json(updatedObject)
     },
 
     async destroy(ctx) {
@@ -140,7 +126,7 @@ export function Crud(options: CrudOperationsOptions): ClassDecorator {
         return ctx.response.status(204)
       }
 
-      return ctx.response.status(404)
+      return ctx.response.status(404).json({ msg: 'Not Found' })
     },
   }
 

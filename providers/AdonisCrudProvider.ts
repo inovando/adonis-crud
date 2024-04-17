@@ -8,6 +8,7 @@ export default class AdonisCrudProvider {
     const QueryBuilder = await import('../src/QueryBuilder/QueryBuilder')
     const CrudControllerDecorator = await import('../src/Decorators/Controller/CrudDecorator')
     const CrudRepository = await import('../src/Decorators/Repository/CrudRepository')
+
     this.app.container.bind('AdonisCrud/Crud/Controller', () => {
       return CrudControllerDecorator
     })
@@ -28,6 +29,8 @@ export default class AdonisCrudProvider {
       return AbstractCrudRepositoryService
     })
   }
+
+  public async ready() {}
 
   public async boot() {}
 }

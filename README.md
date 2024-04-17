@@ -37,10 +37,6 @@ Also install the hash dependencie
 npm i phc-argon2
 ```
 
-## Install Adonis Bumblebee
-
-As informed here [Bumblebee Documentation](https://github.com/kmorpex/adonis-bublebee-ts)
-
 ## Configure package
 
 ```bash

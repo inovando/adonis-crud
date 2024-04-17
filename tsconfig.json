@@ -13,10 +13,14 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "types": [
-      "@adonisjs/core",
       "@adonisjs/lucid",
-      "adonis-bumblebee-ts"
+      "@adonisjs/core",
     ],
-    "outDir": "build"
+    "outDir": "build",
+    "paths": {
+      "App/Models/*": [
+        "./src/Models/*"
+      ]
+    },
   }
 }

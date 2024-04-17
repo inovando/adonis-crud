@@ -6,21 +6,10 @@ type FunctionMap = {
   [key: string]: Function
 }
 
-export type QsRequest = {
-  page: number
-  perPage: number
-  all: boolean
-}
-
-export interface IndexRequest {
-  qs: QsRequest
-  authUser?: any
-}
-
 export function CrudRepository<T extends LucidModel>(Model: T): ClassDecorator {
   return (target) => {
     const functionMap: FunctionMap = {
-      index({ qs: { ...rest } }: IndexRequest) {
+      index({ qs: { ...rest } }) {
         const query = QueryBuilder.build({
           model: Model,
           qs: rest,
@@ -56,6 +45,9 @@ export function CrudRepository<T extends LucidModel>(Model: T): ClassDecorator {
         }
       },
       async getById({ id, status }) {
+        if (!id) {
+          throw new Error('Id is required')
+        }
         const query = Model.query()
 
         if (status) {

@@ -1,4 +1,4 @@
-async function PaginationResponse({ qs, query, transformerClass, ctx }) {
+async function PaginationResponse({ qs, query }) {
   const { all, page = 1, perPage = 10 } = qs
 
   if (all) {
@@ -12,18 +12,16 @@ async function PaginationResponse({ qs, query, transformerClass, ctx }) {
     lastPage,
   } = await query.paginate(page, perPage)
 
-  return ctx.transform.paginate(
-    {
-      rows,
-      pages: {
-        page: currentPage,
-        perPage: per_page,
-        total: total,
-        lastPage: lastPage,
-      },
-    },
-    transformerClass
-  )
+  return {
+    rows,
+    pages: {
+      page: currentPage,
+      perPage: per_page,
+      total: total,
+      lastPage: lastPage,
+    }
+  }
+
 }
 
 export default PaginationResponse

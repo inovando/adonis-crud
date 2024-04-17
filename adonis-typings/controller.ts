@@ -1,7 +1,6 @@
 declare module '@ioc:AdonisCrud/Crud/Controller' {
   export interface CrudOperationsOptions {
     repository: any
-    transformer: any
     validators: {
       store?: any
       update?: any

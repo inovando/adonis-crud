@@ -1,47 +1,19 @@
 import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 import { QueryBuilder } from '../../QueryBuilder/QueryBuilder'
 import { DateTime } from 'luxon'
-
-export type QsRequest<T> = {
-  page?: number
-  perPage?: number
-  all?: boolean
-  order?: 'asc' | 'desc'
-  sort?: string
-  others_params: Partial<T>
-}
-
-export interface IndexRequest<T> {
-  qs: QsRequest<T>
-  authUser?: any
-}
-
-export type RequestUpdatePayload<T> = {
-  id: string
-  body: Partial<T>
-}
-
-export type GetByIdRequest = {
-  id: string
-  status?: boolean
-}
-
-export interface IRepository<T> {
-  index(request: IndexRequest<T>)
-  show(id: string, status?: boolean): Promise<T>
-  update({ id, body }: RequestUpdatePayload<T>): Promise<T>
-  destroy(id)
-  getById(id)
-  bulkInsert(items)
-  bulkDelete(ids)
-  store(propsToStore): Promise<T>
-}
+import {
+  GetByIdRequest,
+  IndexRequest,
+  RequestUpdatePayload,
+  ShowRequest,
+} from '@ioc:AdonisCrud/Crud/Types'
+import { IRepository } from '@ioc:AdonisCrud/Crud/AbstractCrudRepository'
 
 export abstract class AbstractCrudRepository<T> implements IRepository<T> {
   protected selecteFields: Array<string> = []
   constructor(private model: LucidModel) {}
 
-  public index({ qs: { ...rest } }: IndexRequest<T>): QueryBuilder {
+  public index({ qs: { ...rest } }: IndexRequest): QueryBuilder {
     const query = QueryBuilder.build({
       model: this.model,
       qs: rest,
@@ -50,7 +22,7 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
     return query
   }
 
-  public async show(id: string, status?: boolean): Promise<T> {
+  public async show({ id, status }: ShowRequest): Promise<T> {
     return this.getById({ id, status })
   }
 
