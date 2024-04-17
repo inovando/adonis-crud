@@ -8,6 +8,7 @@ declare module '@ioc:AdonisCrud/Crud/Controller' {
     storeProps: string[]
     updateProps: string[]
     event: any
+    transformer?: any
   }
 
   const Crud: (options: CrudOperationsOptions) => ClassDecorator
