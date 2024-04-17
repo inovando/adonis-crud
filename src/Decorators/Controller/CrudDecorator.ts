@@ -2,6 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PaginationResponse from './PaginationHelper'
 export interface CrudOperationsOptions {
   repository: any
+  transformer?: any
   validators: {
     store?: any
     update?: any
