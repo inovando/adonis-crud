@@ -44,7 +44,7 @@ export function CrudRepository<T extends LucidModel>(Model: T): ClassDecorator {
           throw error
         }
       },
-      async getById({ id, status, includes = [] }) {
+      async getById({ id, status }) {
         if (!id) {
           throw new Error('Id is required')
         }
