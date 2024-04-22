@@ -41,7 +41,7 @@ export function Crud(options: CrudOperationsOptions): ClassDecorator {
       const { params, request } = ctx
       const queryString = request.qs()
       let authUser = ctx.auth.user
-
+      console.log(queryString.includes)
       const data = await options.repository.show({
         id: params.id,
         authUser,
