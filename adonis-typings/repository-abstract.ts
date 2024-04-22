@@ -1,5 +1,10 @@
 declare module '@ioc:AdonisCrud/Crud/AbstractCrudRepository' {
-  import { IndexRequest, RequestUpdatePayload, ShowRequest } from '@ioc:AdonisCrud/Crud/Types'
+  import {
+    GetByIdRequest,
+    IndexRequest,
+    RequestUpdatePayload,
+    ShowRequest,
+  } from '@ioc:AdonisCrud/Crud/Types'
 
   import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
   import {
@@ -23,7 +28,7 @@ declare module '@ioc:AdonisCrud/Crud/AbstractCrudRepository' {
     show({ id, status }: ShowRequest): Promise<T>
     update({ id, body }: AbstractRepositorRequestUpdatePayload<T>): Promise<T>
     destroy(id: string)
-    getById(id: string)
+    getById({ id }: GetByIdRequest)
     bulkInsert(items: Partial<T>[])
     bulkDelete(ids: string[])
     store(propsToStore: Partial<T>): Promise<T>
