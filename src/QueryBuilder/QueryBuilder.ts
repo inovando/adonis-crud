@@ -77,7 +77,7 @@ export class QueryBuilder {
     const query = model.query().select([...mergedSelectFields] as unknown as Array<string>)
 
     const whereOperator = qs?.where_operator || 'and'
-    const includes = this.splitAndTrim(qs.include)
+    const includes = this.splitAndTrim(qs.includes)
 
     this.handleIncludes(query, includes, model, qs)
     this.handleQueryStringParameters(query, qs, whereOperator)
