@@ -46,6 +46,7 @@ export function Crud(options: CrudOperationsOptions): ClassDecorator {
         id: params.id,
         authUser,
         status: queryString.status,
+        includes: queryString.includes,
       })
       if (!data) {
         return ctx.response.status(404).json({ msg: 'Not Found' })
