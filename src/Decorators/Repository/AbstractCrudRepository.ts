@@ -56,7 +56,7 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
   public async getById({ id, status = true, includes = [] }: GetByIdRequest) {
     const query: any = QueryBuilder.build({
       model: this.model,
-      qs: { status, id, include: includes },
+      qs: { status, id, includes },
       selectFields: this.selecteFields,
     })
 

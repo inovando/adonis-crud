@@ -17,8 +17,8 @@ export function CrudRepository<T extends LucidModel>(Model: T): ClassDecorator {
         })
         return query
       },
-      async show({ id, status }) {
-        return this.getById({ id, status })
+      async show({ id, status, includes }) {
+        return this.getById({ id, status, includes })
       },
       async store(propsToStore) {
         const model = await Model.create(propsToStore)
@@ -44,7 +44,7 @@ export function CrudRepository<T extends LucidModel>(Model: T): ClassDecorator {
           throw error
         }
       },
-      async getById({ id, status }) {
+      async getById({ id, status, includes = [] }) {
         if (!id) {
           throw new Error('Id is required')
         }
