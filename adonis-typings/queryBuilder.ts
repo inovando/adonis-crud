@@ -1,7 +1,7 @@
 declare module '@ioc:AdonisCrud/Crud/QueryBuilder' {
   import { Knex } from 'knex'
   import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-  import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
+  import { LucidModel, LucidRow } from '@ioc:Adonis/Lucid/Orm'
   interface QueryBuild {
     model: LucidModel
     qs: any
@@ -19,7 +19,7 @@ declare module '@ioc:AdonisCrud/Crud/QueryBuilder' {
     useTransaction(trx: TransactionClientContract): any
     reporterData(data: any): any
     toQuery(): string
-    exec(): Promise<LucidModel[]>
+    exec(): Promise<LucidRow[]>
     toSQL(): Knex.Sql
     paginate(page: number, perPage?: number): Promise<any>
   }
