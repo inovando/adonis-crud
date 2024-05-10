@@ -17,8 +17,8 @@ export function CrudRepository<T extends LucidModel>(Model: T): ClassDecorator {
         })
         return query
       },
-      async show({ id, status }) {
-        return this.getById({ id, status })
+      async show({ id, status, includes }) {
+        return this.getById({ id, status, includes })
       },
       async store(propsToStore) {
         const model = await Model.create(propsToStore)

@@ -22,8 +22,8 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
     return query
   }
 
-  public async show({ id, status }: ShowRequest): Promise<T> {
-    return this.getById({ id, status })
+  public async show({ id, status, includes }: ShowRequest): Promise<T> {
+    return this.getById({ id, status, includes })
   }
 
   public async store(propsToStore: Partial<T>): Promise<T> {
@@ -53,10 +53,10 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
     }
   }
 
-  public async getById({ id, status = true }: GetByIdRequest) {
+  public async getById({ id, status = true, includes = '' }: GetByIdRequest) {
     const query: any = QueryBuilder.build({
       model: this.model,
-      qs: { status, id },
+      qs: { status, id, includes },
       selectFields: this.selecteFields,
     })
 

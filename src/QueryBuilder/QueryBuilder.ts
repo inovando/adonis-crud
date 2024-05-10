@@ -2,7 +2,7 @@ import { Operator, Operators, WHERE_OPERATOR_OR } from './QueryOperators'
 
 import { ExecutableQueryBuilderContract } from '@ioc:AdonisCrud/Crud/QueryBuilder'
 
-const keysToIgnorePagination = ['page', 'perPage', 'all', 'include', 'header']
+const keysToIgnorePagination = ['page', 'perPage', 'all', 'includes', 'header']
 const orderAndSortToIgnore = ['order', 'sort']
 const queryOpertosToIgnore = [
   'select_fields',
@@ -72,12 +72,12 @@ export class QueryBuilder {
 
   public static build({ model, qs, selectFields }): ExecutableQueryBuilderContract {
     const selectFieldsQs = qs.select_fields?.split(',') || []
-    const mergedSelectFields = new Set(selectFields?.concat(selectFieldsQs)) || []
+    const mergedSelectFields = Array.from(new Set(selectFields?.concat(selectFieldsQs)) || [])
 
-    const query = model.query().select([...mergedSelectFields] as unknown as Array<string>)
+    const query = model.query().select(Array.from(mergedSelectFields) as string[])
 
     const whereOperator = qs?.where_operator || 'and'
-    const includes = this.splitAndTrim(qs.include)
+    const includes = this.splitAndTrim(qs.includes)
 
     this.handleIncludes(query, includes, model, qs)
     this.handleQueryStringParameters(query, qs, whereOperator)

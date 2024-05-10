@@ -2,6 +2,7 @@ declare module '@ioc:AdonisCrud/Crud/Types' {
   export type ShowRequest = {
     id: string
     status?: boolean
+    includes: string
   }
 
   export type QsRequest = {
@@ -20,6 +21,7 @@ declare module '@ioc:AdonisCrud/Crud/Types' {
   export type GetByIdRequest = {
     id: string
     status?: boolean
+    includes?: string
   }
 
   export type IndexRequest = {
