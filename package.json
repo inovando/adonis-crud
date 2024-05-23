@@ -1,6 +1,6 @@
 {
   "name": "@inovan.do/adonis-crud",
-  "version": "0.1.46",
+  "version": "0.1.47",
   "description": "A crud abstraction for AdonisJs",
   "main": "build/providers/AdonisCrudProvider.js",
   "scripts": {
@@ -12,8 +12,7 @@
     "build": "npm run compile",
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write .",
-    "commit": "git-cz",
+    "format": "prettier --write .",s
     "release": "np --message=\"chore(release): %s\"",
     "version": "npm run build",
     "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json {owner}/{skeleton}"

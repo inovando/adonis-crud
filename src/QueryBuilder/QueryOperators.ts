@@ -1,10 +1,12 @@
+import { DateTime } from 'luxon'
+
 export const WHERE_OPERATOR_END = 'AND'
 export const WHERE_OPERATOR_OR = 'OR'
 
 interface OperatorQueryParam {
   query: any
   param: string
-  value: string
+  value: any
   relation?: string
   whereOperator: string
 }
@@ -29,6 +31,7 @@ export enum Operator {
   NotIn = '$notIn',
   Between = '$between',
   NotBetween = '$notBetween',
+  DateBetween = '$dateBetween',
 }
 
 const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
@@ -122,6 +125,27 @@ const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
   [Operator.NotBetween]: ({ query, param, value }: OperatorQueryParam) => {
     const [start, end] = value.split(',')
     query.whereNotBetween(`${param}`, [start, end])
+  },
+
+  [Operator.DateBetween]: ({ query, param, value }: OperatorQueryParam) => {
+    if (typeof value === 'object') {
+      for (const val of value) {
+        const startOfDay = DateTime.fromISO(val).toJSDate()
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = DateTime.fromISO(val).toJSDate()
+        endOfDay.setHours(23, 59, 59, 999)
+
+        query.orWhereBetween(`${param}`, [startOfDay, endOfDay])
+      }
+    } else {
+      const startOfDay = DateTime.fromISO(value).toJSDate()
+      startOfDay.setHours(0, 0, 0, 0)
+
+      const endOfDay = DateTime.fromISO(value).toJSDate()
+      endOfDay.setHours(23, 59, 59, 999)
+      query.whereBetween(`${param}`, [startOfDay, endOfDay])
+    }
   },
 }
 
