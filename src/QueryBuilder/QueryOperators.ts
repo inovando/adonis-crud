@@ -1,4 +1,4 @@
-import { endOfDay, startOfDay } from 'date-fns'
+import { DateTime } from 'luxon'
 
 export const WHERE_OPERATOR_END = 'AND'
 export const WHERE_OPERATOR_OR = 'OR'
@@ -6,7 +6,7 @@ export const WHERE_OPERATOR_OR = 'OR'
 interface OperatorQueryParam {
   query: any
   param: string
-  value: string
+  value: any
   relation?: string
   whereOperator: string
 }
@@ -128,9 +128,24 @@ const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
   },
 
   [Operator.DateBetween]: ({ query, param, value }: OperatorQueryParam) => {
-    const start = startOfDay(value)
-    const end = endOfDay(value)
-    query.whereNotBetween(`${param}`, [start, end])
+    if (typeof value === 'object') {
+      for (const val of value) {
+        const startOfDay = DateTime.fromISO(val).toJSDate()
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = DateTime.fromISO(val).toJSDate()
+        endOfDay.setHours(23, 59, 59, 999)
+
+        query.orWhereBetween(`${param}`, [startOfDay, endOfDay])
+      }
+    } else {
+      const startOfDay = DateTime.fromISO(value).toJSDate()
+      startOfDay.setHours(0, 0, 0, 0)
+
+      const endOfDay = DateTime.fromISO(value).toJSDate()
+      endOfDay.setHours(23, 59, 59, 999)
+      query.whereBetween(`${param}`, [startOfDay, endOfDay])
+    }
   },
 }
 
