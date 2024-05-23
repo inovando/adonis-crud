@@ -121,6 +121,12 @@ const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
   },
   [Operator.NotBetween]: ({ query, param, value }: OperatorQueryParam) => {
     const [start, end] = value.split(',')
+    const startOfDay = new Date(start)
+    startOfDay.setHours(0, 0, 0, 0)
+
+    const endOfDay = new Date(end)
+    endOfDay.setHours(23, 59, 59, 999)
+
     query.whereNotBetween(`${param}`, [start, end])
   },
 }
