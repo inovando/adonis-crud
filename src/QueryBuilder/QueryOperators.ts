@@ -1,3 +1,5 @@
+import { endOfDay, startOfDay } from 'date-fns'
+
 export const WHERE_OPERATOR_END = 'AND'
 export const WHERE_OPERATOR_OR = 'OR'
 
@@ -29,6 +31,7 @@ export enum Operator {
   NotIn = '$notIn',
   Between = '$between',
   NotBetween = '$notBetween',
+  DateBetween = '$dateBetween',
 }
 
 const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
@@ -121,12 +124,12 @@ const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
   },
   [Operator.NotBetween]: ({ query, param, value }: OperatorQueryParam) => {
     const [start, end] = value.split(',')
-    const startOfDay = new Date(start)
-    startOfDay.setHours(0, 0, 0, 0)
+    query.whereNotBetween(`${param}`, [start, end])
+  },
 
-    const endOfDay = new Date(end)
-    endOfDay.setHours(23, 59, 59, 999)
-
+  [Operator.DateBetween]: ({ query, param, value }: OperatorQueryParam) => {
+    const start = startOfDay(value)
+    const end = endOfDay(value)
     query.whereNotBetween(`${param}`, [start, end])
   },
 }
