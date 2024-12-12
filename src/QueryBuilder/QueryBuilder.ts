@@ -1,7 +1,5 @@
 import { Operator, Operators, WHERE_OPERATOR_OR } from './QueryOperators'
 
-import { ExecutableQueryBuilderContract } from '@ioc:AdonisCrud/Crud/QueryBuilder'
-
 const keysToIgnorePagination = ['page', 'perPage', 'all', 'includes', 'header']
 const orderAndSortToIgnore = ['order', 'sort']
 const queryOpertosToIgnore = [
@@ -70,7 +68,7 @@ export class QueryBuilder {
     }
   }
 
-  public static build({ model, qs, selectFields }): ExecutableQueryBuilderContract {
+  public static build({ model, qs, selectFields }) {
     const selectFieldsQs = qs.select_fields?.split(',') || []
     const mergedSelectFields = Array.from(new Set(selectFields?.concat(selectFieldsQs)) || [])
 

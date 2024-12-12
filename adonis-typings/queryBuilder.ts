@@ -1,33 +1,36 @@
 declare module '@ioc:AdonisCrud/Crud/QueryBuilder' {
   import { Knex } from 'knex'
-  import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-  import { LucidModel, LucidRow } from '@ioc:Adonis/Lucid/Orm'
-  interface QueryBuild {
-    model: LucidModel
-    qs: any
-    selectFields?: String[]
+  import {
+    ModelQueryBuilderContract,
+    LucidModel,
+    LucidRow,
+    ModelPaginatorContract,
+  } from '@ioc:Adonis/Lucid/Orm'
+
+  // Interface genérica para os parâmetros do método `build`
+  interface QueryBuild<Model extends LucidModel> {
+    model: Model
+    qs: Record<string, any>
+    selectFields?: string[]
   }
 
-  export type ExecutableQueryBuilderContract = {
-    debug(debug: boolean): any
-    timeout(
-      time: number,
-      options?: {
-        cancel: boolean
-      }
-    ): any
-    useTransaction(trx: TransactionClientContract): any
-    reporterData(data: any): any
+  // Adicionando suporte ao Lucid Model genérico no contrato do QueryBuilder
+  export type ExecutableQueryBuilderContract<Model extends LucidModel> = ModelQueryBuilderContract<
+    Model,
+    InstanceType<Model>
+  > & {
+    toSQL(): Knex.Sql
     toQuery(): string
     exec(): Promise<LucidRow[]>
-    toSQL(): Knex.Sql
-    paginate(page: number, perPage?: number): Promise<any>
+    paginate(page: number, perPage: number): Promise<ModelPaginatorContract<InstanceType<Model>>>
   }
 
+  // Interface para o construtor de QueryBuilder
   export interface QueryBuilderType {
-    build: ({ model, qs }: QueryBuild) => ExecutableQueryBuilderContract
+    build<Model extends LucidModel>(args: QueryBuild<Model>): ExecutableQueryBuilderContract<Model>
   }
 
+  // Exportação principal do QueryBuilder
   const QueryBuilder: QueryBuilderType
   export { QueryBuilder }
 }

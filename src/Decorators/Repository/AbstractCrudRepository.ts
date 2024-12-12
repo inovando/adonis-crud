@@ -32,7 +32,7 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
   }
 
   public async update({ id, body }: RequestUpdatePayload<T>) {
-    const modelToUpdate = await this.getById({ id, status: true })
+    const modelToUpdate = await this.getById({ id })
     if (!modelToUpdate) {
       return false
     }
@@ -42,7 +42,7 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
   }
 
   public async destroy(id: string) {
-    const modelToDelete = await this.getById({ id, status: true })
+    const modelToDelete = await this.getById({ id })
     if (!modelToDelete) return false
     try {
       modelToDelete.merge({ status: false, deleted_at: DateTime.now() })
