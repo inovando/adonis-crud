@@ -30,7 +30,7 @@ export default class AdonisCrudProvider {
       return AbstractCrudRepositoryService
     })
 
-    this.app.container.bind('AdonisCrud/Crud/PaginationHelper', () => {
+    this.app.container.bind('AdonisCrud/Controller/PaginationHelper', () => {
       return PaginationHelper
     })
   }

@@ -29,11 +29,13 @@ declare module '@ioc:AdonisCrud/Controller/PaginationHelper' {
     }
   }
 
-  export function PaginationResponse({
+  const PaginationHelper: ({
     qs,
     query,
   }: {
     qs: PaginationQueryParams
     query: PaginationQuery
-  }): Promise<any[] | PaginationResponseResult>
+  }) => Promise<any[] | PaginationResponseResult>
+
+  export default PaginationHelper
 }
