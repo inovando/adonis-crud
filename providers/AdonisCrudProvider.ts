@@ -8,6 +8,7 @@ export default class AdonisCrudProvider {
     const QueryBuilder = await import('../src/QueryBuilder/QueryBuilder')
     const CrudControllerDecorator = await import('../src/Decorators/Controller/CrudDecorator')
     const CrudRepository = await import('../src/Decorators/Repository/CrudRepository')
+    const PaginationHelper = await import('../src/Decorators/Controller/PaginationHelper')
 
     this.app.container.bind('AdonisCrud/Crud/Controller', () => {
       return CrudControllerDecorator
@@ -27,6 +28,10 @@ export default class AdonisCrudProvider {
 
     this.app.container.bind('AdonisCrud/Crud/AbstractCrudRepository', () => {
       return AbstractCrudRepositoryService
+    })
+
+    this.app.container.bind('AdonisCrud/Crud/PaginationHelper', () => {
+      return PaginationHelper
     })
   }
 
