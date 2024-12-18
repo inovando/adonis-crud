@@ -53,10 +53,10 @@ export abstract class AbstractCrudRepository<T> implements IRepository<T> {
     }
   }
 
-  public async getById({ id, status, includes = '' }: GetByIdRequest) {
-    const query: any = QueryBuilder.build({
+  public async getById({ id, includes = '' }: GetByIdRequest) {
+    const query = QueryBuilder.build({
       model: this.model,
-      qs: { status, id, includes },
+      qs: { 'status.$in': [true, false], includes, 'id.$equals': id },
       selectFields: this.selecteFields,
     })
 

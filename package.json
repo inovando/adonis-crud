@@ -1,6 +1,6 @@
 {
   "name": "@inovan.do/adonis-crud",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "description": "A crud abstraction for AdonisJs",
   "main": "build/providers/AdonisCrudProvider.js",
   "scripts": {
