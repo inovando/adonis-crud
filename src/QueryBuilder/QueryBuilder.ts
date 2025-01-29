@@ -78,7 +78,7 @@ export class QueryBuilder {
     const includes = this.splitAndTrim(qs.includes)
 
     this.handleIncludes(query, includes, model, qs)
-    this.handleQueryStringParameters(query, qs, whereOperator)
+    this.handleQueryStringParameters(query, qs, whereOperator, model)
     this.applyOrder({ query, qs, model })
     return query
   }
@@ -141,7 +141,13 @@ export class QueryBuilder {
     return booleans[value]
   }
 
-  private static async handleQueryStringParameters(query: any, qs: any, whereOperator: string) {
+  private static async handleQueryStringParameters(
+    query: any,
+    qs: any,
+    whereOperator: string,
+    model: any
+  ) {
+    const tableName = model?.table
     for (const key in qs) {
       if (keysToIgnore.includes(key)) continue
       let value = qs[key]
@@ -151,7 +157,7 @@ export class QueryBuilder {
 
       const scenarios = {
         3: () => this.handleThreePartKey(query, parts, value, whereOperator),
-        2: () => this.handleTwoPartKey(query, parts, value, whereOperator),
+        2: () => this.handleTwoPartKey(query, parts, value, whereOperator, tableName),
         1: () => this.handleOnePartKey(query, param, value, whereOperator),
       }
 
@@ -222,16 +228,28 @@ export class QueryBuilder {
     // })
   }
 
-  private static handleTwoPartKey(query: any, parts: string[], value: any, whereOperator: string) {
+  private static handleTwoPartKey(
+    query: any,
+    parts: string[],
+    value: any,
+    whereOperator: string,
+    tableName: string
+  ) {
     const [first, second] = parts
 
     let operator: any = second as Operator
 
     if (second.startsWith('$')) {
-      Operators[operator]({ query, param: first, value, whereOperator })
+      Operators[operator]({ query, param: first, value, whereOperator, relation: tableName })
     } else {
       query.whereHas(first, (subQuery) => {
-        Operators[operator]({ query: subQuery, param: second, value, whereOperator })
+        Operators[operator]({
+          query: subQuery,
+          param: second,
+          value,
+          whereOperator,
+          relation: tableName,
+        })
       })
     }
   }

@@ -51,15 +51,15 @@ const Operators: Record<Operator, (params: OperatorQueryParam) => void> = {
 
       if (whereOperator.toUpperCase() === WHERE_OPERATOR_OR)
         query.orWhere(`${relation}.${param}`, 'ILIKE', `%${value}%`)
-    }
+    } else {
+      if (whereOperator.toUpperCase() === WHERE_OPERATOR_END)
+        query.where(`${param}`, 'ILIKE', `%${value}%`)
 
-    if (whereOperator.toUpperCase() === WHERE_OPERATOR_END)
-      query.where(`${param}`, 'ILIKE', `%${value}%`)
-
-    if (whereOperator.toUpperCase() === WHERE_OPERATOR_OR) {
-      query.orWhere((q) => {
-        q.where(`${param}`, 'ILIKE', `%${value}%`)
-      })
+      if (whereOperator.toUpperCase() === WHERE_OPERATOR_OR) {
+        query.orWhere((q) => {
+          q.where(`${param}`, 'ILIKE', `%${value}%`)
+        })
+      }
     }
   },
   [Operator.GreaterThanOrEqual]: ({ query, param, value }: OperatorQueryParam) => {
